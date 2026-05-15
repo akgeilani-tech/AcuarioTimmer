@@ -11,4 +11,6 @@ public:
     void save(Settings &s);
 
     void load(Settings &s);
+
+    void reset();
 };

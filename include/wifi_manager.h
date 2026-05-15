@@ -11,5 +11,7 @@ public:
     bool isConfigured();
 
     bool connected();
+
+    bool hasInternet();
     
 };

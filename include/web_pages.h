@@ -94,6 +94,42 @@ async function loadSchedulerStatus() {
 window.onload =
     loadSchedulerStatus;
 
+async function factoryReset() {
+
+    const confirmReset =
+        confirm(
+            "Reset device to factory settings?"
+        );
+
+    if (!confirmReset)
+        return;
+
+    try {
+
+        const response =
+            await fetch(
+                '/factoryreset',
+                {
+                    method: 'POST'
+                }
+            );
+
+        const text =
+            await response.text();
+
+        alert(text);
+
+    }
+    catch(error) {
+
+        alert(
+            "Reset failed"
+        );
+
+        console.log(error);
+    }
+}
+
 </script>
 
 <body>
@@ -164,6 +200,33 @@ Current Time
 Save
 </button>
 
+<hr>
+
+<h2>WiFi Configuration</h2>
+
+<input
+    type="text"
+    id="wifiSSID"
+    placeholder="SSID"
+>
+
+<input
+    type="password"
+    id="wifiPassword"
+    placeholder="Password"
+>
+
+<button onclick="saveWifi()">
+    Save WiFi
+</button>
+<hr>
+
+<h2>Device Settings</h2>
+
+<button class="resetButton" onclick="factoryReset()">
+    Factory Reset
+</button>
+
 <script>
 
 function saveConfig(){
@@ -225,101 +288,42 @@ setInterval(
 
 updateClock();
 
-</script>
 
-</body>
-</html>
+async function saveWifi() {
 
-)rawliteral";
+    const ssid =
+        document.getElementById(
+            'wifiSSID'
+        ).value;
 
-const char WIFI_SETUP_HTML[] PROGMEM = R"rawliteral(
+    const password =
+        document.getElementById(
+            'wifiPassword'
+        ).value;
 
-<!DOCTYPE html>
-<html>
+    const response =
+        await fetch(
+            '/savewifi',
+            {
+                method: 'POST',
 
-<head>
+                headers: {
+                    'Content-Type':
+                    'application/json'
+                },
 
-<meta charset="UTF-8">
+                body: JSON.stringify({
 
-<title>
-WiFi Setup
-</title>
+                    ssid,
+                    password
+                })
+            }
+        );
 
-<style>
+    const text =
+        await response.text();
 
-body{
-    font-family:Arial;
-    margin:20px;
-}
-
-input{
-    display:block;
-    margin-bottom:10px;
-    padding:10px;
-    width:300px;
-}
-
-button{
-    padding:10px 20px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>
-WiFi Setup
-</h1>
-
-<input
-    id="ssid"
-    placeholder="WiFi SSID"
->
-
-<input
-    id="password"
-    type="password"
-    placeholder="WiFi Password"
->
-
-<button onclick="saveWifi()">
-Save
-</button>
-
-<script>
-
-async function saveWifi(){
-
-    const data = {
-
-        ssid:
-            document.getElementById(
-                "ssid"
-            ).value,
-
-        password:
-            document.getElementById(
-                "password"
-            ).value
-    };
-
-    await fetch('/savewifi',{
-
-        method:'POST',
-
-        headers:{
-            'Content-Type':
-            'application/json'
-        },
-
-        body:JSON.stringify(data)
-    });
-
-    alert(
-        "Device restarting..."
-    );
+    alert(text);
 }
 
 </script>

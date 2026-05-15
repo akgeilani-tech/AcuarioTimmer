@@ -63,18 +63,18 @@ static void handleTime() {
 
 static void handleRoot() {
 
-    if (
-        !wifiManager.connected()
-    ) {
+    // if (
+    //     !wifiManager.connected()
+    // ) {
 
-        server.send_P(
-            200,
-            "text/html",
-            WIFI_SETUP_HTML
-        );
+    //     server.send_P(
+    //         200,
+    //         "text/html",
+    //         WIFI_SETUP_HTML
+    //     );
 
-        return;
-    }
+    //     return;
+    // }
 
     server.send_P(
         200,
@@ -123,6 +123,59 @@ static void handleSave() {
         "text/plain",
         "OK"
     );
+}
+
+static void handleFactoryReset() {
+
+    Serial.println(
+        "Factory Reset Requested"
+    );
+
+    server.send(
+        200,
+        "text/plain",
+        "Device resetting..."
+    );
+
+    delay(1000);
+
+    /*
+        Limpiar configuración
+    */
+
+    storageManager.reset();
+
+    delay(1000);
+
+    /*
+        Desconectar WiFi
+    */
+
+    WiFi.disconnect(true);
+
+    delay(100);
+
+    /*
+        Apagar AP
+    */
+
+    WiFi.softAPdisconnect(true);
+
+    delay(100);
+
+    /*
+        Deshabilitar WiFi
+    */
+
+    WiFi.mode(WIFI_OFF);
+
+    delay(1000);
+
+    /*
+        Reiniciar RP2040
+    */
+
+    rp2040.restart();
 }
 
 static void handleSchedulerStatus() {
@@ -185,6 +238,12 @@ void WebServerManager::begin() {
         "/scheduler",
         HTTP_GET,
         handleSchedulerStatus
+    );
+
+    server.on(
+        "/factoryreset",
+        HTTP_POST,
+        handleFactoryReset
     );
 
     server.begin();

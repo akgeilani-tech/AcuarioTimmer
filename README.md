@@ -1,3 +1,4 @@
+
 # Aquarium Timer Controller - Raspberry Pi Pico W
 
 Sistema IoT para automatización de acuarios utilizando Raspberry Pi Pico W.
@@ -300,3 +301,5 @@ GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 ## Autor
 
 Ing. Ahmed Kamil Geilani
+
+>>>>>>> a2e984f21f2c81fa82ab3631926fbcb78430029b

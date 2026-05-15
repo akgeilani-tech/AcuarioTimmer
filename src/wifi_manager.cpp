@@ -4,6 +4,7 @@
 
 #include "settings.h"
 #include "wifi_manager.h"
+#include <WiFiClient.h>
 
 extern Settings settings;
 
@@ -234,4 +235,38 @@ bool WifiManager::connected() {
 
     return WiFi.status() == WL_CONNECTED;
 
+}
+
+bool WifiManager::hasInternet() {
+
+    WiFiClient client;
+
+    Serial.println(
+        "Testing internet..."
+    );
+
+    // Probar DNS/Internet con conexión a 8.8.8.8:80
+
+    bool ok =
+        client.connect(
+            "google.com",
+            80
+        );
+
+    if (ok) {
+
+        Serial.println(
+            "Internet OK"
+        );
+
+        client.stop();
+
+        return true;
+    }
+
+    Serial.println(
+        "No internet"
+    );
+
+    return false;
 }

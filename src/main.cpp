@@ -32,6 +32,7 @@ WebServerManager webServerManager;
 unsigned long lastWiFiCheck = 0;
 
 bool reconnecting = false;
+bool wifiOK = false;
 
 void setup() {
 
@@ -56,30 +57,68 @@ void setup() {
     servoManager.begin();
 
     // Verifica si WiFI está configurado y conectado, si no, inicia el modo AP para configuración
+    // Verificar si existe configuración WiFi 
     if (
         wifiManager.isConfigured()
     ) {
 
-        bool wifiOK =
+        Serial.println(
+            "WiFi configured"
+        );
+
+    // Intentar conexión
+
+        wifiOK =
             wifiManager.connect();
+
+    // Verificar acceso real a internet
+
+        if (wifiOK) {
+
+            Serial.println(
+                "Checking internet..."
+            );
+
+            wifiOK =
+                wifiManager.hasInternet();
+        }
+
+    // Si falla cualquier cosa iniciar AP para configuración
 
         if (!wifiOK) {
 
+            Serial.println(
+                "Starting setup AP..."
+            );
+
             wifiManager.startAP();
-        }
-        if (wifiOK) {
-
-            ntpManager.begin();
-
-            ntpManager.update();
         }
     }
     else {
 
-        wifiManager.startAP();
+        Serial.println(
+            "WiFi not configured"
+        );
 
+    // Configuración inicial de WiFi, iniciar AP para configuración
+
+        wifiManager.startAP();
     }
 
+    //Solo si internet OK
+
+    if (wifiOK) {
+
+        Serial.println(
+            "Internet OK"
+        );
+
+        ntpManager.begin();
+
+        delay(2000);
+
+        ntpManager.update();
+    }
     webServerManager.begin();
 
     scheduler.begin();

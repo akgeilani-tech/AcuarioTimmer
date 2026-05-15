@@ -21,3 +21,28 @@ void StorageManager::load(Settings &s) {
 
     EEPROM.get(0, s);
 }
+
+void StorageManager::reset() {
+
+    Serial.println(
+        "Resetting EEPROM..."
+    );
+
+    for (
+        int i = 0;
+        i < EEPROM_SIZE;
+        i++
+    ) {
+
+        EEPROM.write(
+            i,
+            0
+        );
+    }
+
+    EEPROM.commit();
+
+    Serial.println(
+        "EEPROM cleared"
+    );
+}
