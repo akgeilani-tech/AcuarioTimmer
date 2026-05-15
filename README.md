@@ -9,7 +9,7 @@ Permite:
 - Programar horarios de alimentación automática
 - Sincronización horaria mediante NTP
 - Respaldo horario mediante RTC DS3231
-- Configuración WiFi vía portal cautivo
+- Configuración WiFi
 - Interfaz web local
 - Almacenamiento persistente de configuración
 - Funcionamiento autónomo sin internet
@@ -48,7 +48,7 @@ Permite:
 
 ### WiFi Setup
 
-En el primer arranque el sistema crea un Access Point:
+En el primer arranque el sistema crea un AP:
 
 ```text
 SSID: AquariumSetup
@@ -278,7 +278,7 @@ Usar:
 
 ## Estado del proyecto
 
-- [x] WiFi Setup Portal
+- [x] WiFi Setup
 - [x] RTC DS3231
 - [x] NTP Sync
 - [x] Scheduler
